@@ -1,3 +1,4 @@
+from __future__ import division
 # -*- coding: utf-8 -*-
 """ 
 Trains a ResNeXt Model on Cifar10 and Cifar 100. Implementation as defined in:
@@ -11,7 +12,6 @@ arXiv preprint arXiv:1611.05431.
 __author__ = "Pau Rodríguez López, ISELAB, CVC-UAB"
 __email__ = "pau.rodri1@gmail.com"
 
-from __future__ import division
 import argparse
 import os
 import json
