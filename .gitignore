@@ -87,3 +87,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Pycharm project
+.idea
+cifar-10*
+**/log.txt
