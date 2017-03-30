@@ -92,3 +92,4 @@ ENV/
 .idea
 cifar-10*
 **/log.txt
+**/*.pytorch

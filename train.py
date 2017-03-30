@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('dataset', type=str, choices=['cifar10', 'cifar100'], help='Choose between Cifar10/100.')
     # Optimization options
     parser.add_argument('--epochs', '-e', type=int, default=300, help='Number of epochs to train.')
-    parser.add_argument('--batch_size', '-b', type=int, default=32, help='Batch size.')
+    parser.add_argument('--batch_size', '-b', type=int, default=256, help='Batch size.')
     parser.add_argument('--learning_rate', '-lr', type=float, default=0.1, help='The Learning Rate.')
     parser.add_argument('--momentum', '-m', type=float, default=0.9, help='Momentum.')
     parser.add_argument('--decay', '-d', type=float, default=0.0005, help='Weight decay (L2 penalty).')
@@ -70,6 +70,8 @@ if __name__ == '__main__':
 
     # Init model, criterion, and optimizer
     net = CifarResNeXt(args.cardinality, args.depth, nlabels, args.widen_factor)
+    if args.ngpu > 1:
+        net = torch.nn.DataParallel(net, device_ids=list(range(args.ngpu)))
 
     if args.ngpu > 0:
         net.cuda()
@@ -122,6 +124,7 @@ if __name__ == '__main__':
 
 
     # Main loop
+    best_accuracy = 0.0
     for epoch in range(args.epochs):
         if epoch in args.schedule:
             state['learning_rate'] *= args.gamma
@@ -131,5 +134,13 @@ if __name__ == '__main__':
         state['epoch'] = epoch
         train()
         test()
+        if state['test_accuracy'] > best_accuracy:
+            best_accuracy = state['test_accuracy']
+            torch.save(net.state_dict(), os.path.join(args.save, 'model.pytorch'))
+        log.write('%s\n' %json.dumps(state))
+        log.flush()
         print(state)
+        print("Best accuracy: %f" %best_accuracy)
+
+    log.close()
 
