@@ -93,3 +93,5 @@ ENV/
 cifar-10*
 **/log.txt
 **/*.pytorch
+snapshots
+logs

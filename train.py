@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--learning_rate', '-lr', type=float, default=0.1, help='The Learning Rate.')
     parser.add_argument('--momentum', '-m', type=float, default=0.9, help='Momentum.')
     parser.add_argument('--decay', '-d', type=float, default=0.0005, help='Weight decay (L2 penalty).')
-    parser.add_argument('--test_bs', type=int, default=100)
+    parser.add_argument('--test_bs', type=int, default=10)
     parser.add_argument('--schedule', type=int, nargs='+', default=[150, 225],
                         help='Decrease learning rate at these epochs.')
     parser.add_argument('--gamma', type=float, default=0.1, help='LR is multiplied by gamma on schedule.')
@@ -50,6 +50,9 @@ if __name__ == '__main__':
     args.schedule = [x * 256 // args.batch_size for x in args.schedule]
 
     # Init dataset
+    if not os.path.isdir(args.data_path):
+        os.makedirs(args.data_path)
+
     train_transform = transforms.Compose(
         [transforms.RandomHorizontalFlip(), transforms.RandomCrop(32, padding=8), transforms.ToTensor(),
          transforms.Normalize((125.3, 123.0, 113.9), (63.0, 62.1, 66.7))])
@@ -65,8 +68,12 @@ if __name__ == '__main__':
         nlabels = 100
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=args.batch_size, shuffle=True,
                                                num_workers=args.prefetch, pin_memory=True)
-    test_loader = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, shuffle=False,
+    test_loader = torch.utils.data.DataLoader(test_data, batch_size=args.test_bs, shuffle=False,
                                               num_workers=args.prefetch, pin_memory=True)
+
+    # Init checkpoints
+    if not os.path.isdir(args.save):
+        os.makedirs(args.save)
 
     # Init model, criterion, and optimizer
     net = CifarResNeXt(args.cardinality, args.depth, nlabels, args.widen_factor)
