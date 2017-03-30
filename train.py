@@ -6,6 +6,7 @@ import torch
 import torch.nn.functional as F
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
+import time
 from models.model import CifarResNeXt
 
 if __name__ == '__main__':
@@ -15,7 +16,7 @@ if __name__ == '__main__':
     parser.add_argument('dataset', type=str, choices=['cifar10', 'cifar100'], help='Choose between Cifar10/100.')
     # Optimization options
     parser.add_argument('--epochs', '-e', type=int, default=300, help='Number of epochs to train.')
-    parser.add_argument('--batch_size', '-b', type=int, default=256, help='Batch size.')
+    parser.add_argument('--batch_size', '-b', type=int, default=128, help='Batch size.')
     parser.add_argument('--learning_rate', '-lr', type=float, default=0.1, help='The Learning Rate.')
     parser.add_argument('--momentum', '-m', type=float, default=0.9, help='Momentum.')
     parser.add_argument('--decay', '-d', type=float, default=0.0005, help='Weight decay (L2 penalty).')
@@ -46,18 +47,21 @@ if __name__ == '__main__':
     log.write(json.dumps(state) + '\n')
 
     # Calculate number of epochs wrt batch size
-    args.epochs = args.epochs * 256 // args.batch_size
-    args.schedule = [x * 256 // args.batch_size for x in args.schedule]
+    args.epochs = args.epochs * 128 // args.batch_size
+    args.schedule = [x * 128 // args.batch_size for x in args.schedule]
 
     # Init dataset
     if not os.path.isdir(args.data_path):
         os.makedirs(args.data_path)
 
+    mean = [ x / 255 for x in [125.3, 123.0, 113.9] ]
+    std = [ x / 255 for x in [63.0, 62.1, 66.7] ]
+
     train_transform = transforms.Compose(
         [transforms.RandomHorizontalFlip(), transforms.RandomCrop(32, padding=8), transforms.ToTensor(),
-         transforms.Normalize((125.3, 123.0, 113.9), (63.0, 62.1, 66.7))])
+         transforms.Normalize(mean, std)])
     test_transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((125.3, 123.0, 113.9), (63.0, 62.1, 66.7))])
+        [transforms.ToTensor(), transforms.Normalize(mean, std)])
     if args.dataset == 'cifar10':
         train_data = dset.CIFAR10(args.data_path, train=True, transform=train_transform, download=True)
         test_data = dset.CIFAR10(args.data_path, train=False, transform=test_transform, download=True)
@@ -104,7 +108,6 @@ if __name__ == '__main__':
 
             # exponential moving average
             loss_avg = loss_avg*0.2 + loss.data[0]*0.8
-
         state['train_loss'] = loss_avg
 
     # test function (forward only)

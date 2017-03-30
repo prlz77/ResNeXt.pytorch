@@ -15,7 +15,8 @@ class ResNeXtBottleneck(nn.Module):
         self.conv_expand = nn.Conv2d(D, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
         self.bn_expand = nn.BatchNorm2d(out_channels)
 
-        self.shortcut = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=0, bias=False)
+        self.shortcut_conv = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=0, bias=False)
+        self.shortcut_bn = nn.BatchNorm2d(out_channels)
 
     def forward(self, x):
         bottleneck = self.conv_reduce.forward(x)
@@ -23,8 +24,10 @@ class ResNeXtBottleneck(nn.Module):
         bottleneck = self.conv_conv.forward(bottleneck)
         bottleneck = F.relu(self.bn.forward(bottleneck), inplace=True)
         bottleneck = self.conv_expand.forward(bottleneck)
-        bottleneck = F.relu(self.bn_expand.forward(bottleneck), inplace=True)
-        return F.relu(self.shortcut.forward(x) + bottleneck, inplace=True)
+        bottleneck = self.bn_expand.forward(bottleneck)
+        residual = self.shortcut_conv.forward(x)
+        residual = self.shortcut_bn.forward(residual)
+        return F.relu(residual + bottleneck, inplace=True)
 
 
 class CifarResNeXt(nn.Module):
@@ -47,9 +50,13 @@ class CifarResNeXt(nn.Module):
         init.kaiming_normal(self.classifier.weight)
 
         for key in self.state_dict():
-            if key.split('.')[-1]:
+            if key.split('.')[-1] == 'weight':
                 if 'conv' in key:
-                    init.kaiming_normal(self.state_dict()[key])
+                    init.kaiming_normal(self.state_dict()[key], mode='fan_out')
+                if 'bn' in key:
+                    self.state_dict()[key][...] = 1
+            elif key.split('.')[-1] == 'bias':
+                self.state_dict()[key][...] = 0
 
     def block(self, name, in_channels, out_channels, pool_stride=2):
         block = nn.Sequential()
