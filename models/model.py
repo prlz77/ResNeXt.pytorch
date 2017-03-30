@@ -1,3 +1,5 @@
+from __future__ import division
+
 # -*- coding: utf-8 -*-
 """ 
 Creates a ResNeXt Model as defined in:
@@ -11,7 +13,6 @@ arXiv preprint arXiv:1611.05431.
 __author__ = "Pau Rodríguez López, ISELAB, CVC-UAB"
 __email__ = "pau.rodri1@gmail.com"
 
-from __future__ import division
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import init
