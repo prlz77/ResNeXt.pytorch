@@ -84,7 +84,7 @@ if __name__ == '__main__':
         net.cuda()
 
     optimizer = torch.optim.SGD(net.parameters(), state['learning_rate'], momentum=state['momentum'],
-                                weight_decay=state['decay'])
+                                weight_decay=state['decay'], nesterov=True)
 
     # train function (forward, backward, update)
     def train():
@@ -135,9 +135,9 @@ if __name__ == '__main__':
     for epoch in range(args.epochs):
         if epoch in args.schedule:
             state['learning_rate'] *= args.gamma
-            optim_state = optimizer.state_dict()
-            optim_state['param_groups'][0]['lr'] = state['learning_rate']
-            optimizer.load_state_dict(optim_state)
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = state['learning_rate']
+
         state['epoch'] = epoch
         train()
         test()

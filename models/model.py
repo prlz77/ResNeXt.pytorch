@@ -65,7 +65,6 @@ class CifarResNeXt(nn.Module):
 
     def forward(self, x):
         x = self.conv_1_3x3.forward(x)
-        x = self.bn_1.forward(x)
         x = F.relu(self.bn_1.forward(x), inplace=True)
         x = self.stage_1.forward(x)
         x = self.stage_2.forward(x)
