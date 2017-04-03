@@ -1,4 +1,17 @@
 from __future__ import division
+# -*- coding: utf-8 -*-
+""" 
+Trains a ResNeXt Model on Cifar10 and Cifar 100. Implementation as defined in:
+
+Xie, S., Girshick, R., Dollár, P., Tu, Z., & He, K. (2016). 
+Aggregated residual transformations for deep neural networks. 
+arXiv preprint arXiv:1611.05431.
+
+"""
+
+__author__ = "Pau Rodríguez López, ISELAB, CVC-UAB"
+__email__ = "pau.rodri1@gmail.com"
+
 import argparse
 import os
 import json
@@ -6,7 +19,6 @@ import torch
 import torch.nn.functional as F
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
-import time
 from models.model import CifarResNeXt
 
 if __name__ == '__main__':
@@ -55,8 +67,8 @@ if __name__ == '__main__':
     if not os.path.isdir(args.data_path):
         os.makedirs(args.data_path)
 
-    mean = [ x / 255 for x in [125.3, 123.0, 113.9] ]
-    std = [ x / 255 for x in [63.0, 62.1, 66.7] ]
+    mean = [x / 255 for x in [125.3, 123.0, 113.9]]
+    std = [x / 255 for x in [63.0, 62.1, 66.7]]
 
     train_transform = transforms.Compose(
         [transforms.RandomHorizontalFlip(), transforms.RandomCrop(32, padding=8), transforms.ToTensor(),
@@ -109,8 +121,9 @@ if __name__ == '__main__':
             optimizer.step()
 
             # exponential moving average
-            loss_avg = loss_avg*0.2 + loss.data[0]*0.8
+            loss_avg = loss_avg * 0.2 + loss.data[0] * 0.8
         state['train_loss'] = loss_avg
+
 
     # test function (forward only)
     def test():
@@ -149,10 +162,9 @@ if __name__ == '__main__':
         if state['test_accuracy'] > best_accuracy:
             best_accuracy = state['test_accuracy']
             torch.save(net.state_dict(), os.path.join(args.save, 'model.pytorch'))
-        log.write('%s\n' %json.dumps(state))
+        log.write('%s\n' % json.dumps(state))
         log.flush()
         print(state)
-        print("Best accuracy: %f" %best_accuracy)
+        print("Best accuracy: %f" % best_accuracy)
 
     log.close()
-
