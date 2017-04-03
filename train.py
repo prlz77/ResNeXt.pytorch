@@ -10,7 +10,8 @@ import time
 from models.model import CifarResNeXt
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Trains ResNeXt on CIFAR')
+    parser = argparse.ArgumentParser(description='Trains ResNeXt on CIFAR', 
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # Positional arguments
     parser.add_argument('data_path', type=str, help='Root for the Cifar dataset.')
     parser.add_argument('dataset', type=str, choices=['cifar10', 'cifar100'], help='Choose between Cifar10/100.')
@@ -81,6 +82,7 @@ if __name__ == '__main__':
 
     # Init model, criterion, and optimizer
     net = CifarResNeXt(args.cardinality, args.depth, nlabels, args.widen_factor)
+    print(net)
     if args.ngpu > 1:
         net = torch.nn.DataParallel(net, device_ids=list(range(args.ngpu)))
 

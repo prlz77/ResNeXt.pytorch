@@ -15,8 +15,10 @@ class ResNeXtBottleneck(nn.Module):
         self.conv_expand = nn.Conv2d(D, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
         self.bn_expand = nn.BatchNorm2d(out_channels)
 
-        self.shortcut_conv = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=0, bias=False)
-        self.shortcut_bn = nn.BatchNorm2d(out_channels)
+        self.shortcut = nn.Sequential()
+        if in_channels != out_channels:
+            self.shortcut.add('shortcut_conv', nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=0, bias=False))
+            self.shortcut.add('shortcut_bn', nn.BatchNorm2d(out_channels))
 
     def forward(self, x):
         bottleneck = self.conv_reduce.forward(x)
@@ -25,8 +27,7 @@ class ResNeXtBottleneck(nn.Module):
         bottleneck = F.relu(self.bn.forward(bottleneck), inplace=True)
         bottleneck = self.conv_expand.forward(bottleneck)
         bottleneck = self.bn_expand.forward(bottleneck)
-        residual = self.shortcut_conv.forward(x)
-        residual = self.shortcut_bn.forward(residual)
+        residual = self.shortcut.forward(x)
         return F.relu(residual + bottleneck, inplace=True)
 
 
