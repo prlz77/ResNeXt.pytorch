@@ -95,3 +95,5 @@ cifar-10*
 **/*.pytorch
 snapshots
 logs
+*.txt
+*.png
