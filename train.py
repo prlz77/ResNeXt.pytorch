@@ -71,7 +71,7 @@ if __name__ == '__main__':
     std = [x / 255 for x in [63.0, 62.1, 66.7]]
 
     train_transform = transforms.Compose(
-        [transforms.RandomHorizontalFlip(), transforms.RandomCrop(32, padding=8), transforms.ToTensor(),
+        [transforms.RandomHorizontalFlip(), transforms.RandomCrop(32, padding=4), transforms.ToTensor(),
          transforms.Normalize(mean, std)])
     test_transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize(mean, std)])
