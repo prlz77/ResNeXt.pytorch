@@ -10,7 +10,7 @@ Reproduces ResNet-V3 (Aggregated Residual Transformations for Deep Neural Networ
 To train on Cifar-10 using 2 gpu:
 
 ```bash
-python train.py ~/DATASETS/cifar.python cifar10 -s ./snapshots --log ./logs --ngpu 2 --learning_rate 0.1 -b 128
+python train.py ~/DATASETS/cifar.python cifar10 -s ./snapshots --log ./logs --ngpu 2 --learning_rate 0.05 -b 128
 ```
 It should reach *~3.65%* on Cifar-10, and *~17.77%* on Cifar-100.
 
