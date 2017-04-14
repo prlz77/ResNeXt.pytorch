@@ -2,7 +2,7 @@
 Reproduces ResNet-V3 (Aggregated Residual Transformations for Deep Neural Networks) with pytorch.
 
 - [x] Trains on Cifar10 and Cifar100
-- [ ] Upload Cifar Training Curves
+- [x] Upload Cifar Training Curves
 - [x] Upload Cifar Trained Models
 - [ ] Train Imagenet
 
