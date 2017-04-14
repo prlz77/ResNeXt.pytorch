@@ -90,10 +90,6 @@ ENV/
 
 # Pycharm project
 .idea
-cifar-10*
-**/log.txt
-**/*.pytorch
 snapshots
 logs
-*.txt
-*.png
+*.pytorch
