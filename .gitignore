@@ -93,3 +93,4 @@ ENV/
 snapshots
 logs
 *.pytorch
+*.tar.bz
