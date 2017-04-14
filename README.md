@@ -3,7 +3,7 @@ Reproduces ResNet-V3 (Aggregated Residual Transformations for Deep Neural Networ
 
 - [x] Trains on Cifar10 and Cifar100
 - [ ] Upload Cifar Training Curves
-- [ ] Upload Cifar Trained Models
+- [x] Upload Cifar Trained Models
 - [ ] Train Imagenet
 
 ## Usage
@@ -21,6 +21,9 @@ From [the original paper](https://arxiv.org/pdf/1611.05431.pdf):
 |:-----------:|:------------:|:----------:|:----------------:|:-----------------:|:-------:|
 |      8      |       4      |    34.4M   |       3.65       |       17.77       |    x    |
 |      16     |      64      |    68.1M   |       3.58       |       17.31       |         |
+
+## Trained models and curves
+
 
 
 ## Other frameworks
