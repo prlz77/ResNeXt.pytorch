@@ -23,8 +23,10 @@ From [the original paper](https://arxiv.org/pdf/1611.05431.pdf):
 |      16     |      64      |    68.1M   |       3.58       |       17.31       |         |
 
 ## Trained models and curves
+[Link](https://mega.nz/#F!wbJXDS6b!YN3hCDi1tT3SdNFrLPm7mA) to trained models corresponding to the following curves:
 
-
+![CIFAR-10](https://github.com/prlz77/ResNeXt.pytorch/blob/master/cifar10/cifar-10.jpg)
+![CIFAR-100](https://github.com/prlz77/ResNeXt.pytorch/blob/master/cifar100/cifar-100.jpg)
 
 ## Other frameworks
 * [torch (@facebookresearch)](https://github.com/facebookresearch/ResNeXt). (Original) Cifar and Imagenet
