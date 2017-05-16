@@ -1,5 +1,6 @@
-from __future__ import division
 # -*- coding: utf-8 -*-
+from __future__ import division
+
 """ 
 Trains a ResNeXt Model on Cifar10 and Cifar 100. Implementation as defined in:
 
