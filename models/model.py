@@ -1,6 +1,6 @@
+# -*- coding: utf-8 -*-
 from __future__ import division
 
-# -*- coding: utf-8 -*-
 """ 
 Creates a ResNeXt Model as defined in:
 
