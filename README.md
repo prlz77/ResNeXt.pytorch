@@ -14,6 +14,15 @@ python train.py ~/DATASETS/cifar.python cifar10 -s ./snapshots --log ./logs --ng
 ```
 It should reach *~3.65%* on Cifar-10, and *~17.77%* on Cifar-100.
 
+
+After train phase, you can check saved model.
+
+To Test on Cifar-10 using 2 gpu:
+```bash
+python test.py ~/DATASETS/cifar.python cifar10 --ngpu 2 --load ./snapshots/model.pytorch --test_bs 128 
+```
+
+
 ## Configurations
 From [the original paper](https://arxiv.org/pdf/1611.05431.pdf):
 
