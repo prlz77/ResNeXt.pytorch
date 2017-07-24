@@ -17,7 +17,7 @@ It should reach *~3.65%* on Cifar-10, and *~17.77%* on Cifar-100.
 
 After train phase, you can check saved model.
 
-Thanks to [@AppleHolic](https://github.com/AppleHolic) we have now a test script:
+**Thanks to [@AppleHolic](https://github.com/AppleHolic) we have now a test script:**
 
 To test on Cifar-10 using 2 gpu:
 ```bash
