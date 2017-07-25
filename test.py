@@ -50,7 +50,6 @@ def get_args():
 def test():
     # define default variables
     args = get_args()# divide args part and call it as function
-    nlabels = 100
     mean = [x / 255 for x in [125.3, 123.0, 113.9]]
     std = [x / 255 for x in [63.0, 62.1, 66.7]]
     state = {k: v for k, v in args._get_kwargs()}
@@ -59,6 +58,13 @@ def test():
     test_transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize(mean, std)])
     test_data = dset.CIFAR100(args.data_path, train=False, transform=test_transform, download=True)
+    if args.dataset == 'cifar10':
+        test_data = dset.CIFAR10(args.data_path, train=False, transform=test_transform, download=True)
+        nlabels = 10
+    else:
+        test_data = dset.CIFAR100(args.data_path, train=False, transform=test_transform, download=True)
+        nlabels = 100
+
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=args.test_bs, shuffle=False,
                                               num_workers=args.prefetch, pin_memory=True)
 
