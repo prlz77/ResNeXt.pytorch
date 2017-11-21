@@ -22,7 +22,8 @@ class ResNeXtBottleneck(nn.Module):
     """
     RexNeXt bottleneck type C (https://github.com/facebookresearch/ResNeXt/blob/master/models/resnext.lua)
     """
-    def __init__(self, in_channels, out_channels, stride, cardinality, widen_factor):
+
+    def __init__(self, in_channels, out_channels, stride, cardinality, base_width, widen_factor):
         """ Constructor
 
         Args:
@@ -30,10 +31,12 @@ class ResNeXtBottleneck(nn.Module):
             out_channels: output channel dimensionality
             stride: conv stride. Replaces pooling layer.
             cardinality: num of convolution groups.
+            base_width: base number of channels in each group.
             widen_factor: factor to reduce the input dimensionality before convolution.
         """
         super(ResNeXtBottleneck, self).__init__()
-        D = cardinality * out_channels // widen_factor
+        width_ratio = in_channels / (widen_factor * 64.)
+        D = cardinality * int(base_width * width_ratio)
         self.conv_reduce = nn.Conv2d(in_channels, D, kernel_size=1, stride=1, padding=0, bias=False)
         self.bn_reduce = nn.BatchNorm2d(D)
         self.conv_conv = nn.Conv2d(D, D, kernel_size=3, stride=stride, padding=1, groups=cardinality, bias=False)
@@ -43,7 +46,9 @@ class ResNeXtBottleneck(nn.Module):
 
         self.shortcut = nn.Sequential()
         if in_channels != out_channels:
-            self.shortcut.add_module('shortcut_conv', nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=0, bias=False))
+            self.shortcut.add_module('shortcut_conv',
+                                     nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=0,
+                                               bias=False))
             self.shortcut.add_module('shortcut_bn', nn.BatchNorm2d(out_channels))
 
     def forward(self, x):
@@ -62,19 +67,22 @@ class CifarResNeXt(nn.Module):
     ResNext optimized for the Cifar dataset, as specified in
     https://arxiv.org/pdf/1611.05431.pdf
     """
-    def __init__(self, cardinality, depth, nlabels, widen_factor=4):
+
+    def __init__(self, cardinality, depth, nlabels, base_width, widen_factor=4):
         """ Constructor
 
         Args:
             cardinality: number of convolution groups.
             depth: number of layers.
             nlabels: number of classes
+            base_width: base number of channels in each group.
             widen_factor: factor to adjust the channel dimensionality
         """
         super(CifarResNeXt, self).__init__()
         self.cardinality = cardinality
         self.depth = depth
         self.block_depth = (self.depth - 2) // 9
+        self.base_width = base_width
         self.widen_factor = widen_factor
         self.nlabels = nlabels
         self.output_size = 64
@@ -114,10 +122,11 @@ class CifarResNeXt(nn.Module):
             name_ = '%s_bottleneck_%d' % (name, bottleneck)
             if bottleneck == 0:
                 block.add_module(name_, ResNeXtBottleneck(in_channels, out_channels, pool_stride, self.cardinality,
-                                                          self.widen_factor))
+                                                          self.base_width, self.widen_factor))
             else:
                 block.add_module(name_,
-                                 ResNeXtBottleneck(out_channels, out_channels, 1, self.cardinality, self.widen_factor))
+                                 ResNeXtBottleneck(out_channels, out_channels, 1, self.cardinality, self.base_width,
+                                                   self.widen_factor))
         return block
 
     def forward(self, x):
