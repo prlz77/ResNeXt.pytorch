@@ -28,10 +28,12 @@ python test.py ~/DATASETS/cifar.python cifar10 --ngpu 2 --load ./snapshots/model
 ## Configurations
 From [the original paper](https://arxiv.org/pdf/1611.05431.pdf):
 
-| cardinality | widen_factor | parameters |  Error cifar10   |   error cifar100  | default |
+| cardinality |  base_width  | parameters |  Error cifar10   |   error cifar100  | default |
 |:-----------:|:------------:|:----------:|:----------------:|:-----------------:|:-------:|
-|      8      |       4      |    34.4M   |       3.65       |       17.77       |    x    |
+|      8      |      64      |    34.4M   |       3.65       |       17.77       |    x    |
 |      16     |      64      |    68.1M   |       3.58       |       17.31       |         |
+
+**Update:** ``widen_factor`` has been disentangled from ``base_width`` because it was confusing. Now widen factor is set to consant 4, and ``base_width`` is the same as in the original paper.
 
 ## Trained models and curves
 [Link](https://mega.nz/#F!wbJXDS6b!YN3hCDi1tT3SdNFrLPm7mA) to trained models corresponding to the following curves:
