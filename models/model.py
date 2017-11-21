@@ -35,7 +35,7 @@ class ResNeXtBottleneck(nn.Module):
             widen_factor: factor to reduce the input dimensionality before convolution.
         """
         super(ResNeXtBottleneck, self).__init__()
-        width_ratio = in_channels / (widen_factor * 64.)
+        width_ratio = out_channels / (widen_factor * 64.)
         D = cardinality * int(base_width * width_ratio)
         self.conv_reduce = nn.Conv2d(in_channels, D, kernel_size=1, stride=1, padding=0, bias=False)
         self.bn_reduce = nn.BatchNorm2d(D)
