@@ -28,7 +28,7 @@ python test.py ~/DATASETS/cifar.python cifar10 --ngpu 2 --load ./snapshots/model
 ## Configurations
 From [the original paper](https://arxiv.org/pdf/1611.05431.pdf):
 
-| cardinality | widen_factor | parameters | accuracy cifar10 | accuracy cifar100 | default |
+| cardinality | widen_factor | parameters |  Error cifar10   |   error cifar100  | default |
 |:-----------:|:------------:|:----------:|:----------------:|:-----------------:|:-------:|
 |      8      |       4      |    34.4M   |       3.65       |       17.77       |    x    |
 |      16     |      64      |    68.1M   |       3.58       |       17.31       |         |
