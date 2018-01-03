@@ -38,6 +38,8 @@ From [the original paper](https://arxiv.org/pdf/1611.05431.pdf):
 ## Trained models and curves
 [Link](https://mega.nz/#F!wbJXDS6b!YN3hCDi1tT3SdNFrLPm7mA) to trained models corresponding to the following curves:
 
+**Update:** several commits have been pushed after training the models in Mega, so it is recommended to revert to ``e10c37d8cf7a958048bc0f58cd86c3e8ac4e707d``
+
 ![CIFAR-10](https://github.com/prlz77/ResNeXt.pytorch/blob/master/cifar10/cifar-10.jpg)
 ![CIFAR-100](https://github.com/prlz77/ResNeXt.pytorch/blob/master/cifar100/cifar-100.jpg)
 
