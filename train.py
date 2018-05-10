@@ -123,7 +123,8 @@ if __name__ == '__main__':
             optimizer.step()
 
             # exponential moving average
-            loss_avg = loss_avg * 0.2 + loss.data[0] * 0.8
+            loss_avg = loss_avg * 0.2 + float(loss) * 0.8
+
         state['train_loss'] = loss_avg
 
 
@@ -141,10 +142,10 @@ if __name__ == '__main__':
 
             # accuracy
             pred = output.data.max(1)[1]
-            correct += pred.eq(target.data).sum()
+            correct += float(pred.eq(target.data).sum())
 
             # test loss average
-            loss_avg += loss.data[0]
+            loss_avg += float(loss)
 
         state['test_loss'] = loss_avg / len(test_loader)
         state['test_accuracy'] = correct / len(test_loader.dataset)
