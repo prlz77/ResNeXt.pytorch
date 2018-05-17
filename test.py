@@ -2,7 +2,7 @@
 from __future__ import division
 
 """ 
-Trains a ResNeXt Model on Cifar10 and Cifar 100. Implementation as defined in:
+Test the ResNeXt Model on Cifar10 and Cifar 100. Implementation as defined in:
 
 Xie, S., Girshick, R., Dollár, P., Tu, Z., & He, K. (2016). 
 Aggregated residual transformations for deep neural networks. 
