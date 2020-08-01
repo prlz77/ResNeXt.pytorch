@@ -1,6 +1,7 @@
 # ResNeXt.pytorch
 Reproduces ResNet-V3 (Aggregated Residual Transformations for Deep Neural Networks) with pytorch.
 
+- [x] Tried on pytorch 1.6
 - [x] Trains on Cifar10 and Cifar100
 - [x] Upload Cifar Training Curves
 - [x] Upload Cifar Trained Models
