@@ -4,14 +4,14 @@ Reproduces ResNet-V3 (Aggregated Residual Transformations for Deep Neural Networ
 - [x] Trains on Cifar10 and Cifar100
 - [x] Upload Cifar Training Curves
 - [x] Upload Cifar Trained Models
-- [x] Pytorch 4.0
+- [x] Pytorch 0.4.0
 - [ ] Train Imagenet
 
 ## Download
 ```bash
 git clone https://github.com/prlz77/resnext.pytorch
 cd resnext.pytorch
-git checkout R4.0 # R3.0 for backwards compatibility.
+# git checkout R4.0 or R3.0 for backwards compatibility (not recommended).
 ```
 
 ## Usage
