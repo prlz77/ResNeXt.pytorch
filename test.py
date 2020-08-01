@@ -74,8 +74,11 @@ def test():
     loaded_state_dict = torch.load(args.load)
     temp = {}
     for key, val in list(loaded_state_dict.items()):
-        # parsing keys for ignoring 'module.' in keys
-        temp[key[7:]] = val
+        if 'module' in key:
+            # parsing keys for ignoring 'module.' in keys
+            temp[key[7:]] = val
+        else:
+            temp[key] = val
     loaded_state_dict = temp
     net.load_state_dict(loaded_state_dict)
 
@@ -91,19 +94,20 @@ def test():
     # calculation part
     loss_avg = 0.0
     correct = 0.0
-    for batch_idx, (data, target) in enumerate(test_loader):
-        data, target = torch.autograd.Variable(data.cuda()), torch.autograd.Variable(target.cuda())
+    with torch.no_grad():
+        for batch_idx, (data, target) in enumerate(test_loader):
+            data, target = torch.autograd.Variable(data.cuda()), torch.autograd.Variable(target.cuda())
 
-        # forward
-        output = net(data)
-        loss = F.cross_entropy(output, target)
+            # forward
+            output = net(data)
+            loss = F.cross_entropy(output, target)
 
-        # accuracy
-        pred = output.data.max(1)[1]
-        correct += pred.eq(target.data).sum()
+            # accuracy
+            pred = output.data.max(1)[1]
+            correct += pred.eq(target.data).sum()
 
-        # test loss average
-        loss_avg += loss.data[0]
+            # test loss average
+            loss_avg += loss.item()
 
     state['test_loss'] = loss_avg / len(test_loader)
     state['test_accuracy'] = correct / len(test_loader.dataset)
